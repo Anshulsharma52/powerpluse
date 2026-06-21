@@ -118,8 +118,8 @@ Create a `.env` file in the `backend/` directory and configure the following par
 
 ```env
 PORT=5000
-MONGO_URI=mongodb://localhost:27017/chargenowev
-JWT_SECRET=supersecretjwtkey_chargenowev
+MONGO_URI=your_mongodb_uri
+JWT_SECRET=your_jwt_secret
 FRONTEND_URL=http://localhost:5173
 ```
 
