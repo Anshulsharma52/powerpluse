@@ -1,6 +1,7 @@
 import React, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import api from '../api';
 
 export const AuthContext = createContext();
 
@@ -19,7 +20,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (identifier, password, role) => {
     try {
       const config = { headers: { 'Content-Type': 'application/json' } };
-      const { data } = await axios.post('/api/auth/login', { identifier, password, role }, config);
+      const { data } = await api.post('/auth/login', { identifier, password, role }, config);
       setUser(data);
       localStorage.setItem('userInfo', JSON.stringify(data));
       toast.success('Logged in successfully!');
@@ -33,7 +34,7 @@ export const AuthProvider = ({ children }) => {
   const register = async (name, email, mobile, password, role) => {
     try {
       const config = { headers: { 'Content-Type': 'application/json' } };
-      const { data } = await axios.post('/api/auth/register', { name, email, mobile, password, role }, config);
+      const { data } = await api.post('/auth/register', { name, email, mobile, password, role }, config);
       setUser(data);
       localStorage.setItem('userInfo', JSON.stringify(data));
       toast.success('Registration successful!');
