@@ -5,6 +5,7 @@ import { MapPin, BatteryCharging, Star, Zap, Locate } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
+import api from '../api';
 
 // Fix for default Leaflet icon
 delete L.Icon.Default.prototype._getIconUrl;
