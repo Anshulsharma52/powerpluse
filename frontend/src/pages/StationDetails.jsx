@@ -162,7 +162,7 @@ const StationDetails = () => {
       const currentPrice = station?.pricing?.[selectedChargerType] || station?.pricePerKwh || 0;
       const amount = currentPrice * Number(requiredKwh);
 
-      await api.post('/api/bookings', {
+      await api.post('/bookings', {
         station: station._id,
         date,
         startTime: selectedSlot.startTime,
