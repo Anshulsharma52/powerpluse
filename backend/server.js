@@ -18,7 +18,13 @@ const io = new Server(server, {
   },
 });
 
-app.use(cors());
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL,
+    credentials: true,
+  })
+);
+
 app.use(express.json());
 
 // Set socket io object on app to access it in controllers
