@@ -8,8 +8,9 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet-routing-machine';
 import io from 'socket.io-client';
+import api from "../api";
 
-const socket = io('http://localhost:5000');
+const socket = io('https://powerpluse.onrender.com/');
 
 // Routing Component
 const RoutingMachine = ({ userLocation, stationLocation }) => {
@@ -106,7 +107,7 @@ const UserDashboard = () => {
   const fetchBookings = async () => {
     try {
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
-      const { data } = await axios.get('/api/bookings', config);
+      const { data } = await api.get('/bookings', config);
       // Sort by newest first
       setBookings(data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)));
       setLoading(false);

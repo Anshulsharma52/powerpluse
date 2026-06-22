@@ -8,6 +8,7 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet-routing-machine';
 import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
+import api from "../api";
 // Ensure default icons work correctly
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -18,7 +19,7 @@ L.Icon.Default.mergeOptions({
 
 import io from 'socket.io-client';
 
-const socket = io('http://localhost:5000');
+const socket = io('https://powerpluse.onrender.com/');
 
 // Routing Component
 const RoutingMachine = ({ userLocation, stationLocation }) => {
@@ -92,7 +93,7 @@ const StationDetails = () => {
 
   const fetchStation = async () => {
     try {
-      const { data } = await axios.get(`/api/stations/${id}`);
+      const { data } = await api.get(`/stations/${id}`);
       setStation(data);
       if (data.acceptsOnlinePayments) {
         setPaymentMethod('online');
@@ -110,7 +111,7 @@ const StationDetails = () => {
   const fetchSlots = async () => {
     if (!date) return;
     try {
-      const { data } = await axios.get(`/api/bookings/station/${id}/slots?date=${date}`);
+      const { data } = await api.get(`/bookings/station/${id}/slots?date=${date}`);
       setSlots(data);
       setSelectedSlot(null);
     } catch (error) {

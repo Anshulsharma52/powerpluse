@@ -5,8 +5,9 @@ import axios from 'axios';
 import { Users, MapPin, Activity, Settings, UserMinus, ShieldAlert, CheckCircle, XCircle, Percent, DollarSign, TrendingUp, Lock, Unlock, Ban } from 'lucide-react';
 import { toast } from 'react-toastify';
 import io from 'socket.io-client';
+import api from "../api";
 
-const socket = io('http://localhost:5000');
+const socket = io('https://powerpluse.onrender.com/');
 
 const AdminDashboard = () => {
   const { user } = useContext(AuthContext);
@@ -30,22 +31,22 @@ const AdminDashboard = () => {
   const fetchData = async () => {
     try {
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
-      const { data: statsData } = await axios.get('/api/admin/stats', config);
+      const { data: statsData } = await api.get('/admin/stats', config);
       setStats(statsData);
 
-      const { data: usersData } = await axios.get('/api/admin/users', config);
+      const { data: usersData } = await api.get('/admin/users', config);
       setUsers(usersData);
 
-      const { data: bookingsData } = await axios.get('/api/admin/bookings', config);
+      const { data: bookingsData } = await api.get('/admin/bookings', config);
       setBookings(bookingsData.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)));
 
-      const { data: pendingData } = await axios.get('/api/admin/stations/pending', config);
+      const { data: pendingData } = await api.get('/admin/stations/pending', config);
       setPendingStations(pendingData);
 
-      const { data: stationsData } = await axios.get('/api/admin/stations', config);
+      const { data: stationsData } = await api.get('/admin/stations', config);
       setAllStations(stationsData);
 
-      const { data: earningsResp } = await axios.get('/api/admin/earnings', config);
+      const { data: earningsResp } = await api.get('/admin/earnings', config);
       setEarningsData(earningsResp);
       setEarningsLoading(false);
 
@@ -89,7 +90,7 @@ const AdminDashboard = () => {
     if (window.confirm('Are you sure you want to permanently delete this user?')) {
        try {
          const config = { headers: { Authorization: `Bearer ${user.token}` } };
-         await axios.delete(`/api/admin/users/${userId}`, config);
+         await api.delete(`/admin/users/${userId}`, config);
          toast.success('User deleted successfully');
          fetchData();
        } catch (error) {

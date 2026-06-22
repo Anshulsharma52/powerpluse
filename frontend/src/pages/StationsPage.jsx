@@ -101,7 +101,7 @@ const StationsPage = () => {
           }
         }
 
-        const { data } = await axios.get('/api/stations', { params });
+        const { data } = await api.get('/stations', { params });
         setStations(data);
         setActiveStations(data);
       } catch (error) {

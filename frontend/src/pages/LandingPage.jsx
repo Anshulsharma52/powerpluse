@@ -3,8 +3,9 @@ import { Link } from 'react-router-dom';
 import { Zap, MapPin, BatteryCharging, ShieldCheck, ChevronRight, CheckCircle2, Activity } from 'lucide-react';
 import axios from 'axios';
 import io from 'socket.io-client';
+import api from "../api";
 
-const socket = io('http://localhost:5000');
+const socket = io('https://powerpluse.onrender.com/');
 
 const LandingPage = () => {
   const [stats, setStats] = useState({
@@ -17,7 +18,7 @@ const LandingPage = () => {
 
   const fetchStats = async () => {
     try {
-      const { data } = await axios.get('/api/public/stats');
+      const { data } = await api.get('/public/stats');
       setStats(data);
     } catch (error) {
       console.error('Failed to load stats', error);

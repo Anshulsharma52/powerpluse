@@ -7,8 +7,9 @@ import { toast } from 'react-toastify';
 import io from 'socket.io-client';
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents, useMap } from 'react-leaflet';
 import L from 'leaflet';
+import api from "../api";
 
-const socket = io('http://localhost:5000');
+const socket = io('https://powerpluse.onrender.com/');
 
 // Fix for default Leaflet icon
 delete L.Icon.Default.prototype._getIconUrl;
@@ -180,12 +181,12 @@ const OwnerDashboard = () => {
   const fetchStationsAndBookings = async () => {
     try {
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
-      const { data: stationsData } = await axios.get('/api/stations/owner', config);
+      const { data: stationsData } = await api.get('/stations/owner', config);
       setStations(stationsData);
 
       let bookingsData = [];
       for (const station of stationsData) {
-        const { data } = await axios.get(`/api/bookings/station/${station._id}`, config);
+        const { data } = await api.get(`/bookings/station/${station._id}`, config);
         bookingsData = [...bookingsData, ...data];
       }
       setAllBookings(bookingsData.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)));
@@ -199,7 +200,7 @@ const OwnerDashboard = () => {
   const fetchEarnings = async () => {
     try {
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
-      const { data } = await axios.get('/api/bookings/owner/earnings', config);
+      const { data } = await api.get('/bookings/owner/earnings', config);
       setEarningsData(data);
       setEarningsLoading(false);
     } catch (error) {
@@ -241,7 +242,7 @@ const OwnerDashboard = () => {
       const currentPhotos = selectedStationForPhotos.photos || [];
       const updatedPhotos = [...currentPhotos, photoToAdd];
 
-      const { data } = await axios.put(`/api/stations/${selectedStationForPhotos._id}`, { photos: updatedPhotos }, config);
+      const { data } = await api.put(`/stations/${selectedStationForPhotos._id}`, { photos: updatedPhotos }, config);
       setSelectedStationForPhotos(data);
       setPhotoUrlInput('');
       toast.success('Photo added successfully!');
@@ -256,7 +257,7 @@ const OwnerDashboard = () => {
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
       const updatedPhotos = selectedStationForPhotos.photos.filter((_, i) => i !== index);
 
-      const { data } = await axios.put(`/api/stations/${selectedStationForPhotos._id}`, { photos: updatedPhotos }, config);
+      const { data } = await api.put(`/stations/${selectedStationForPhotos._id}`, { photos: updatedPhotos }, config);
       setSelectedStationForPhotos(data);
       toast.success('Photo removed successfully!');
       fetchStationsAndBookings();
@@ -268,7 +269,7 @@ const OwnerDashboard = () => {
   const updateBookingStatus = async (bookingId, status) => {
     try {
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
-      await axios.put(`/api/bookings/${bookingId}/status`, { status }, config);
+      await api.put(`/bookings/${bookingId}/status`, { status }, config);
       toast.success(`Booking marked as ${status}`);
     } catch (error) {
       toast.error('Failed to update booking');
@@ -279,7 +280,7 @@ const OwnerDashboard = () => {
     if (window.confirm('Are you sure you want to delete this station?')) {
        try {
          const config = { headers: { Authorization: `Bearer ${user.token}` } };
-         await axios.delete(`/api/stations/${stationId}`, config);
+         await api.delete(`/stations/${stationId}`, config);
          toast.success('Station deleted successfully');
          fetchStationsAndBookings();
        } catch (error) {
@@ -331,7 +332,7 @@ const OwnerDashboard = () => {
       };
       
       if (editingStationId) {
-        await axios.put(`/api/stations/${editingStationId}`, payload, config);
+        await api.put(`/stations/${editingStationId}`, payload, config);
         toast.success('Station updated successfully!');
       } else {
         await axios.post('/api/stations', payload, config);
