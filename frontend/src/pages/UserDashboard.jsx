@@ -138,7 +138,7 @@ const UserDashboard = () => {
     if (window.confirm('Are you sure you want to cancel this booking?')) {
       try {
         const config = { headers: { Authorization: `Bearer ${user.token}` } };
-        await axios.put(`/api/bookings/${bookingId}/status`, { status: 'cancelled' }, config);
+        await api.put(`/bookings/${bookingId}/status`, { status: 'cancelled' }, config);
         toast.success('Booking cancelled successfully');
       } catch (error) {
         toast.error('Failed to cancel booking');

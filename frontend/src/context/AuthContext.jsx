@@ -59,7 +59,7 @@ export const AuthProvider = ({ children }) => {
           Authorization: `Bearer ${user.token}`,
         },
       };
-      const { data } = await axios.put('/api/auth/profile', formData, config);
+      const { data } = await api.put('/auth/profile', formData, config);
       const updatedUser = { ...user, ...data };
       setUser(updatedUser);
       localStorage.setItem('userInfo', JSON.stringify(updatedUser));

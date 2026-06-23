@@ -335,7 +335,7 @@ const OwnerDashboard = () => {
         await api.put(`/stations/${editingStationId}`, payload, config);
         toast.success('Station updated successfully!');
       } else {
-        await axios.post('/api/stations', payload, config);
+        await api.post('/stations', payload, config);
         toast.success('Station created successfully!');
       }
       setIsModalOpen(false);

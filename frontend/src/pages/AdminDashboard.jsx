@@ -102,7 +102,7 @@ const AdminDashboard = () => {
   const handleStationApproval = async (stationId, status) => {
      try {
        const config = { headers: { Authorization: `Bearer ${user.token}` } };
-       await axios.put(`/api/admin/stations/${stationId}/status`, { status }, config);
+       await api.put(`/admin/stations/${stationId}/status`, { status }, config);
        toast.success(`Station ${status} successfully`);
        fetchData();
      } catch (error) {
@@ -114,7 +114,7 @@ const AdminDashboard = () => {
      try {
        const config = { headers: { Authorization: `Bearer ${user.token}` } };
        const status = block ? 'blocked' : 'approved';
-       await axios.put(`/api/admin/stations/${stationId}/status`, { status }, config);
+       await api.put(`/admin/stations/${stationId}/status`, { status }, config);
        toast.success(block ? 'Station blocked successfully' : 'Station unblocked successfully');
        fetchData();
      } catch (error) {
@@ -125,7 +125,7 @@ const AdminDashboard = () => {
   const handleTaxUpdate = async (stationId, taxRate) => {
      try {
        const config = { headers: { Authorization: `Bearer ${user.token}` } };
-       await axios.put(`/api/admin/stations/${stationId}/tax`, { taxRate: Number(taxRate) }, config);
+       await api.put(`/admin/stations/${stationId}/tax`, { taxRate: Number(taxRate) }, config);
        toast.success(`Tax rate updated to ${taxRate}%`);
        fetchData();
      } catch (error) {
