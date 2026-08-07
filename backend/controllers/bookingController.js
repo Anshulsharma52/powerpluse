@@ -5,6 +5,21 @@ const createBooking = async (req, res) => {
   try {
     const { station, date, startTime, endTime, totalAmount, paymentMethod, chargerType, requiredKwh } = req.body;
 
+    const now = new Date();
+    const bookingDateStr = new Date(date).toISOString().split('T')[0];
+    const todayStr = now.toLocaleDateString('en-CA');
+
+    if (bookingDateStr < todayStr) {
+      return res.status(400).json({ message: 'Cannot book slots in the past' });
+    }
+
+    if (bookingDateStr === todayStr) {
+      const currentTimeStr = now.toTimeString().slice(0, 5);
+      if (startTime < currentTimeStr) {
+        return res.status(400).json({ message: 'Cannot book slots in the past' });
+      }
+    }
+
     const dbStation = await Station.findById(station);
     if (!dbStation) {
       return res.status(404).json({ message: 'Station not found' });
@@ -115,7 +130,7 @@ const getAvailableSlots = async (req, res) => {
 
     const now = new Date();
     const queryDate = new Date(date);
-    const isToday = queryDate.toISOString().split('T')[0] === now.toISOString().split('T')[0];
+    const isToday = queryDate.toISOString().split('T')[0] === now.toLocaleDateString('en-CA');
     const currentTimeStr = now.toTimeString().slice(0, 5);
 
     while (currentSlotStart < closeDate) {

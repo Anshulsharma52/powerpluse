@@ -57,7 +57,7 @@ const StationDetails = () => {
   const navigate = useNavigate();
 
   // Booking State
-  const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
+  const [date, setDate] = useState(new Date().toLocaleDateString('en-CA'));
   const [slots, setSlots] = useState([]);
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [paymentMethod, setPaymentMethod] = useState('station');
@@ -147,6 +147,16 @@ const StationDetails = () => {
 
     if (!date || !selectedSlot) {
       toast.error('Please select a date and time slot');
+      return;
+    }
+
+    const now = new Date();
+    const todayStr = now.toLocaleDateString('en-CA');
+    const bookingDateStr = new Date(date).toISOString().split('T')[0];
+    const currentTimeStr = now.toTimeString().slice(0, 5);
+
+    if (bookingDateStr < todayStr || (bookingDateStr === todayStr && selectedSlot.startTime < currentTimeStr)) {
+      toast.error('Cannot book slots in the past');
       return;
     }
 
@@ -305,7 +315,7 @@ const StationDetails = () => {
                   <input
                     type="date"
                     id="date"
-                    min={new Date().toISOString().split('T')[0]}
+                    min={new Date().toLocaleDateString('en-CA')}
                     className="block w-full sm:w-64 border-2 border-slate-200 text-slate-900 rounded-xl focus:ring-4 focus:ring-primary-500/20 focus:border-primary-500 font-medium p-3 transition-all outline-none"
                     value={date}
                     onChange={(e) => setDate(e.target.value)}
