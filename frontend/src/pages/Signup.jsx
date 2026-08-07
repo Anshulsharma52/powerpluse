@@ -30,6 +30,11 @@ const Signup = () => {
       toast.error("Passwords do not match");
       return;
     }
+    const mobileRegex = /^[0-9]{10}$/;
+    if (!mobileRegex.test(mobile)) {
+      toast.error("Mobile number must be exactly 10 digits long");
+      return;
+    }
     const success = await register(name, email, mobile, password, role);
     if (success) {
       if (role === 'owner') navigate('/owner-dashboard');

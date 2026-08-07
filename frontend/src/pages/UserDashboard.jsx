@@ -72,6 +72,11 @@ const UserDashboard = () => {
 
   const handleProfileSubmit = async (e) => {
     e.preventDefault();
+    const mobileRegex = /^[0-9]{10}$/;
+    if (profileForm.mobile && !mobileRegex.test(profileForm.mobile)) {
+      toast.error("Mobile number must be exactly 10 digits long");
+      return;
+    }
     const cleanForm = { ...profileForm };
     if (!cleanForm.password) delete cleanForm.password;
     const success = await updateProfile(cleanForm);

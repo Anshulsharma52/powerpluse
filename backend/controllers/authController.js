@@ -10,6 +10,11 @@ const registerUser = async (req, res) => {
   try {
     const { name, email, mobile, password, role } = req.body;
 
+    const mobileRegex = /^[0-9]{10}$/;
+    if (!mobileRegex.test(mobile)) {
+      return res.status(400).json({ message: 'Mobile number must be exactly 10 digits long' });
+    }
+
     const userExists = await User.findOne({ $or: [{ email }, { mobile }] });
     if (userExists) {
       return res.status(400).json({ message: 'User with this email or mobile already exists' });
